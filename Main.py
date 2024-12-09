@@ -12,20 +12,21 @@ class Transformer:
         self.encoder_weights = [[0,0,0,0]]*self.encoder_layers
         self.decoder_mask_weights = [[0,0,0,0]]*self.decoder_layers
         self.decoder_weights = [[0,0,0,0]]*self.decoder_layers
+        self.operation = Operations()
         
     def train(self, eng_embedded, fr_embedded):
-        encoder = Encoder(eng_embedded)
-        decoder = Decoder(fr_embedded)
+        encoder = Encoder()
+        decoder = Decoder()
         
         for i in range(self.encoder_layers):
-            Wqe, Wke, Wve, Woe = Operations().generate_self_weights_QKV(eng_embedded)
+            Wqe, Wke, Wve, Woe = self.operation.generate_self_weights_QKV(eng_embedded)
             self.encoder_weights[i] = [Wqe, Wke, Wve, Woe]
                     
         for i in range(self.decoder_layers):
-            Wqmd, Wkmd, Wvmd, Womd = Operations().generate_self_weights_QKV(fr_embedded)
+            Wqmd, Wkmd, Wvmd, Womd = self.operation.generate_self_weights_QKV(fr_embedded)
             self.decoder_mask_weights[i] = [Wqmd, Wkmd, Wvmd, Womd]
             
-            Wqd, Wkd, Wvd, Wod = Operations().generate_cross_weights_QKV(fr_embedded, eng_embedded)
+            Wqd, Wkd, Wvd, Wod = self.operation.generate_cross_weights_QKV(fr_embedded, eng_embedded)
             self.decoder_weights[i] = [Wqd, Wkd, Wvd, Wod]
         
         outpt_probs = None  

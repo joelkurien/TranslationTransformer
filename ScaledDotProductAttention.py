@@ -10,7 +10,7 @@ class ScaledDotProductAttention(nn.Module):
         self.V = V
     
     def simple_attention(self, isMask: bool = False) -> Tensor:
-        _, d_k = self.K.shape
+        _, _, d_k = self.K.shape
         QK = torch.matmul(self.Q, self.K)
         scale = 1/math.sqrt(d_k)
         if isMask:

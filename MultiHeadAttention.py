@@ -6,16 +6,8 @@ from ScaledDotProductAttention import ScaledDotProductAttention
 from Operations import Operations
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, ipt: Tensor, h: int):
-        super(MultiHeadAttention, self).__init__()
-        self.ipt = ipt
-        self.h = h
-        self.Q = Tensor()
-        self.K = Tensor()
-        self.V = Tensor()
-    
-    def __init__(self, ipt: Tensor, opt: Tensor, h: int):
-        super(MultiHeadAttention, self).__init__()
+    def __init__(self, ipt: Tensor, h: int, opt: Tensor = None):
+        super().__init__()
         self.ipt = ipt
         self.opt = opt
         self.h = h
@@ -30,9 +22,9 @@ class MultiHeadAttention(nn.Module):
         
     def forward(self, weights: List[int], isMask: bool = False) -> Tensor:
         self.set_QKV(weights[:-1])
-        _,d_q = self.Q.shape
-        _,d_k = self.K.shape
-        _,d_v = self.V.shape
+        _,_,d_q = self.Q.shape
+        _,_,d_k = self.K.shape
+        _,_,d_v = self.V.shape
         Q_head = self.Q.view(self.ipt.size(0), self.ipt.size(1), self.h, d_q)
         K_head = self.K.view(self.ipt.size(0), self.ipt.size(1), self.h, d_k)
         V_head = self.V.view(self.ipt.size(0), self.ipt.size(1), self.h, d_v)

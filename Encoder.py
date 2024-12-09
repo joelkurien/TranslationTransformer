@@ -3,7 +3,8 @@ from FeedForwardNetwork import FeedForwardNetwork
 from torch import nn, Tensor, inf
 class Encoder: 
     
-    def forward(self, query: Tensor) -> Tensor:
-        attn = MultiHeadAttention(query,8)
+    def forward(self, query: Tensor, weights: Tensor) -> Tensor:
+        h = 8
+        attn = MultiHeadAttention(query, h)
         ffn = FeedForwardNetwork()
-        return ffn.forward(attn.forward(self.query))
+        return ffn.forward(attn.forward(query, weights))
